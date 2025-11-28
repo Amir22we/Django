@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponsePermanentRedirect, HttpResponseNotFound, HttpResponseBadRequest, HttpResponseForbidden
 
 def index(request, id):
+    id = int(id)
     people = [None, 'Bob', 'Sam', 'Tom']
     # если пользователь найден возвращаем его
     if id in range(1, len(people)):
