@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,10 +6,7 @@
     <title>Учу Django</title>
 </head>
 <body>
-    {{ body }}
-
-    {% autoescape off %}
-        {{ body }}
-    {% endautoescape %}
+    <h1>Логотип Django</h1>
+    <img src="{% static 'images/image.png' %}" width="300px">
 </body>
 </html>
