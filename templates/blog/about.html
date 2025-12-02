@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Учу Django</title>
-</head>
-<body>
-    <h1>{{ header }}</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}О нас{% endblock title %}
+{% block title_h1 %}О нас{% endblock title_h1 %}
+
+{% block content %}
+    <p>Телефон: +12345677890</p>
+    <p>Email: admin@admin.com</p>
+{% endblock content %}
