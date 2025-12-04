@@ -1,9 +1,12 @@
 from django.test import SimpleTestCase, Client
 from django.views.generic import TemplateView
-
+from django.utils import timezone
 from . import views
 
 class HomePageGetTests(SimpleTestCase):
+
+    # url
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -23,7 +26,8 @@ class HomePageGetTests(SimpleTestCase):
     def test_view_name(self):
         self.assertEqual(self.response.resolver_match.func, views.index)
 
-    
+    # шаблоны
+
     def test_template_name(self):
         self.assertTemplateUsed(self.response, 'blog/index.html')
 
@@ -34,7 +38,25 @@ class HomePageGetTests(SimpleTestCase):
         self.assertIn('site', self.response.context)
         self.assertEqual(self.response.context['site'], 'mysite.com')
 
+    # тест на html код
+
+    def test_content_title(self):
+        self.assertContains(self.response, '<title>Главная</title>', html=True)
+
+    def test_content_links(self):
+        self.assertContains(self.response, '<a href="/about/">О нас</a>',html=True)
+        self.assertContains(self.response, '<a href="/contact/">Контакты</a>', html=True)
+        self.assertNotContains(self.response, '<a href="/">Главная</a>', html=True)
+
+    def test_content_text(self):
+        self.assertContains(self.response, f'&copy; mysite.com 2023-{timezone.now().year}. All rights reserved.')
+
+
+
 class AboutPageGetTests(SimpleTestCase):
+
+    # url
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -54,7 +76,8 @@ class AboutPageGetTests(SimpleTestCase):
     def test_view_name(self):
         self.assertEqual(self.response.resolver_match.func.view_class, TemplateView)
 
-    
+    # шаблоны
+
     def test_template_name(self):
         self.assertTemplateUsed(self.response, 'blog/about.html')
 
@@ -64,7 +87,25 @@ class AboutPageGetTests(SimpleTestCase):
     def test_context_var(self):
         self.assertIn('site', self.response.context)
         self.assertEqual(self.response.context['site'], 'mysite.com')
+ 
+    # тесты на html
+
+    def test_content_title(self):
+        self.assertContains(self.response, '<title>О нас</title>')
+
+    def test_content_links(self):
+        self.assertContains(self.response, '<a href="/">Главная</a>', html=True)
+        self.assertContains(self.response, '<a href="/contact/">Контакты</a>', html=True)
+        self.assertNotContains(self.response, '<a href="/about/">О нас</a>', html=True)
+
+    def test_content_text(self):
+        self.assertContains(self.response, 'Телефон: +12345677890')
+        self.assertContains(self.response, 'Email: admin@admin.com')
+        self.assertContains(self.response, f'&copy; mysite.com 2023-{timezone.now().year}. All rights reserved.')
 class ContactPageGetTest(SimpleTestCase):
+    
+    # url
+
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
@@ -84,7 +125,8 @@ class ContactPageGetTest(SimpleTestCase):
     def test_view_name(self):
         self.assertEqual(self.response.resolver_match.func, views.contact)
 
-    
+    # шаблон на редирект
+
     def test_redirect_url(self):
         self.assertRedirects(self.response, '/about/')
 
