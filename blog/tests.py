@@ -23,6 +23,17 @@ class HomePageGetTests(SimpleTestCase):
     def test_view_name(self):
         self.assertEqual(self.response.resolver_match.func, views.index)
 
+    
+    def test_template_name(self):
+        self.assertTemplateUsed(self.response, 'blog/index.html')
+
+    def test_base_template_name(self):
+        self.assertTemplateUsed(self.response, 'base.html')
+
+    def test_context_var(self):
+        self.assertIn('site', self.response.context)
+        self.assertEqual(self.response.context['site'], 'mysite.com')
+
 class AboutPageGetTests(SimpleTestCase):
     @classmethod
     def setUpClass(cls):
@@ -42,6 +53,17 @@ class AboutPageGetTests(SimpleTestCase):
     
     def test_view_name(self):
         self.assertEqual(self.response.resolver_match.func.view_class, TemplateView)
+
+    
+    def test_template_name(self):
+        self.assertTemplateUsed(self.response, 'blog/about.html')
+
+    def test_base_template_name(self):
+        self.assertTemplateUsed(self.response, 'base.html')
+
+    def test_context_var(self):
+        self.assertIn('site', self.response.context)
+        self.assertEqual(self.response.context['site'], 'mysite.com')
 class ContactPageGetTest(SimpleTestCase):
     @classmethod
     def setUpClass(cls):
@@ -61,4 +83,10 @@ class ContactPageGetTest(SimpleTestCase):
 
     def test_view_name(self):
         self.assertEqual(self.response.resolver_match.func, views.contact)
+
+    
+    def test_redirect_url(self):
+        self.assertRedirects(self.response, '/about/')
+
+    
 
